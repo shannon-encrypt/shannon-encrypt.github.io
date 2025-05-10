@@ -22,5 +22,12 @@
       <guid>https://shannon-encrypt.github.io/posts/test/</guid>
       <description>&lt;p&gt;This is a test post to check if the blog is working.&lt;/p&gt;</description>
     </item>
+    <item>
+      <title>Top Cybersecurity Trends to Watch in 2025</title>
+      <link>https://shannon-encrypt.github.io/posts/cybersecurity-trends-2025/</link>
+      <pubDate>Sat, 10 May 2025 00:00:00 +0000</pubDate>
+      <guid>https://shannon-encrypt.github.io/posts/cybersecurity-trends-2025/</guid>
+      <description>&lt;p&gt;&lt;img src=&#34;https://www.selecthub.com/wp-content/uploads/2021/03/Cyber-Security-Trends-2025.jpg&#34; alt=&#34;Cybersecurity Trends 2025&#34;&gt;&lt;/p&gt;&#xA;&lt;p&gt;As cyber threats continue to evolve in complexity and scale, 2025 is shaping up to be a defining year for the cybersecurity landscape. Here&amp;rsquo;s a look at the most significant trends that security professionals and organizations should keep an eye on.&lt;/p&gt;&#xA;&lt;hr&gt;&#xA;&lt;h2 id=&#34;1-ai-powered-cyber-attacks&#34;&gt;1. AI-Powered Cyber Attacks&lt;/h2&gt;&#xA;&lt;p&gt;Cybercriminals are leveraging artificial intelligence to create more sophisticated malware that can adapt and evade traditional security measures. These AI-driven attacks can analyze defense mechanisms in real-time and adjust their strategies to bypass them.&lt;/p&gt;</description>
+    </item>
   </channel>
 </rss>

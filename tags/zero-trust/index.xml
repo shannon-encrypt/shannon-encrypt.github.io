@@ -1,27 +1,13 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Posts on The Zero Doh Blog</title>
-    <link>https://shannon-encrypt.github.io/posts/</link>
-    <description>Recent content in Posts on The Zero Doh Blog</description>
+    <title>Zero Trust on The Zero Doh Blog</title>
+    <link>https://shannon-encrypt.github.io/tags/zero-trust/</link>
+    <description>Recent content in Zero Trust on The Zero Doh Blog</description>
     <generator>Hugo</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 10 May 2025 11:28:58 -0700</lastBuildDate>
-    <atom:link href="https://shannon-encrypt.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>My First Post</title>
-      <link>https://shannon-encrypt.github.io/posts/my-first-post/</link>
-      <pubDate>Sat, 10 May 2025 11:28:58 -0700</pubDate>
-      <guid>https://shannon-encrypt.github.io/posts/my-first-post/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>Test Post</title>
-      <link>https://shannon-encrypt.github.io/posts/test/</link>
-      <pubDate>Sat, 10 May 2025 00:00:00 +0000</pubDate>
-      <guid>https://shannon-encrypt.github.io/posts/test/</guid>
-      <description>&lt;p&gt;This is a test post to check if the blog is working.&lt;/p&gt;</description>
-    </item>
+    <lastBuildDate>Sat, 10 May 2025 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://shannon-encrypt.github.io/tags/zero-trust/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Top Cybersecurity Trends to Watch in 2025</title>
       <link>https://shannon-encrypt.github.io/posts/cybersecurity-trends-2025/</link>
