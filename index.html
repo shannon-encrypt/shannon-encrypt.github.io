@@ -1,1 +1,1262 @@
-<!-- Hugo homepage -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Zero Doh Blog | Shannon Agarwal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:       #0b0f18;
+      --bg2:      #111827;
+      --bg3:      #1a2235;
+      --border:   rgba(99,179,237,0.12);
+      --border2:  rgba(99,179,237,0.22);
+      --cyan:     #63b3ed;
+      --cyan-dim: rgba(99,179,237,0.55);
+      --cyan-glow:rgba(99,179,237,0.08);
+      --text:     #e2e8f0;
+      --muted:    #8899aa;
+      --muted2:   #5a6b80;
+      --serif:    'DM Serif Display', serif;
+      --mono:     'DM Mono', monospace;
+      --sans:     'Manrope', sans-serif;
+      --radius:   10px;
+      --radius-lg:16px;
+      --transition: 0.22s cubic-bezier(0.4,0,0.2,1);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      font-size: 15px;
+      line-height: 1.7;
+      min-height: 100vh;
+    }
+
+    /* ── NOISE OVERLAY ─────────────────────────────── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.55;
+    }
+
+    /* ── GRID BG ───────────────────────────────────── */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(99,179,237,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(99,179,237,0.03) 1px, transparent 1px);
+      background-size: 48px 48px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── LAYOUT ────────────────────────────────────── */
+    .page-wrap {
+      position: relative;
+      z-index: 1;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* ── NAV ───────────────────────────────────────── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(11,15,24,0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 24px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-logo {
+      font-family: var(--mono);
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--cyan);
+      text-decoration: none;
+      letter-spacing: 0.04em;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .nav-logo::before {
+      content: '>';
+      opacity: 0.5;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      padding: 6px 14px;
+      border-radius: 6px;
+      transition: color var(--transition), background var(--transition);
+    }
+
+    .nav-links a:hover {
+      color: var(--text);
+      background: var(--bg3);
+    }
+
+    .nav-links .nav-cta {
+      color: var(--cyan);
+      border: 1px solid var(--border2);
+    }
+
+    .nav-links .nav-cta:hover {
+      background: var(--cyan-glow);
+      color: var(--cyan);
+    }
+
+    /* ── HERO ──────────────────────────────────────── */
+    .hero {
+      padding: 96px 0 80px;
+      position: relative;
+    }
+
+    .hero-eyebrow {
+      font-family: var(--mono);
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      color: var(--cyan);
+      text-transform: uppercase;
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .hero-eyebrow::after {
+      content: '';
+      flex: 1;
+      max-width: 60px;
+      height: 1px;
+      background: var(--cyan-dim);
+    }
+
+    .hero h1 {
+      font-family: var(--serif);
+      font-size: clamp(40px, 6vw, 68px);
+      font-weight: 400;
+      line-height: 1.1;
+      color: var(--text);
+      letter-spacing: -0.02em;
+      max-width: 720px;
+      margin-bottom: 24px;
+    }
+
+    .hero h1 em {
+      font-style: italic;
+      color: var(--cyan);
+    }
+
+    .hero-desc {
+      font-size: 17px;
+      color: var(--muted);
+      max-width: 560px;
+      line-height: 1.65;
+      margin-bottom: 40px;
+    }
+
+    .hero-actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      border-radius: var(--radius);
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all var(--transition);
+      letter-spacing: 0.01em;
+      cursor: pointer;
+      border: none;
+    }
+
+    .btn-primary {
+      background: var(--cyan);
+      color: #0b0f18;
+    }
+
+    .btn-primary:hover {
+      background: #90cdf4;
+      transform: translateY(-1px);
+    }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--muted);
+      border: 1px solid var(--border2);
+    }
+
+    .btn-ghost:hover {
+      color: var(--text);
+      border-color: var(--cyan-dim);
+      background: var(--cyan-glow);
+    }
+
+    .hero-stat-row {
+      display: flex;
+      gap: 40px;
+      margin-top: 64px;
+      padding-top: 40px;
+      border-top: 1px solid var(--border);
+      flex-wrap: wrap;
+    }
+
+    .hero-stat {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .hero-stat-num {
+      font-family: var(--mono);
+      font-size: 26px;
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    .hero-stat-label {
+      font-size: 12px;
+      color: var(--muted2);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    /* ── SECTION TITLES ────────────────────────────── */
+    .section-label {
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      color: var(--cyan);
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .section-title {
+      font-family: var(--serif);
+      font-size: clamp(26px, 4vw, 38px);
+      font-weight: 400;
+      line-height: 1.2;
+      color: var(--text);
+      margin-bottom: 40px;
+    }
+
+    /* ── FEATURED POST ─────────────────────────────── */
+    .featured-section {
+      padding: 80px 0 60px;
+    }
+
+    .featured-card {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      transition: border-color var(--transition);
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .featured-card:hover {
+      border-color: var(--border2);
+    }
+
+    .featured-card:hover .featured-img-inner {
+      transform: scale(1.04);
+    }
+
+    .featured-img {
+      background: var(--bg3);
+      overflow: hidden;
+      min-height: 340px;
+      position: relative;
+    }
+
+    .featured-img-inner {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, #1a2b45 0%, #0f1e35 100%);
+      transition: transform 0.5s cubic-bezier(0.4,0,0.2,1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .featured-img-glyph {
+      font-family: var(--mono);
+      font-size: 120px;
+      color: rgba(99,179,237,0.07);
+      line-height: 1;
+      user-select: none;
+    }
+
+    .featured-img-badge {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      background: var(--cyan);
+      color: #0b0f18;
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      padding: 4px 12px;
+      border-radius: 4px;
+      text-transform: uppercase;
+    }
+
+    .featured-body {
+      padding: 48px 44px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .post-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 20px;
+    }
+
+    .tag {
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      padding: 3px 10px;
+      border-radius: 4px;
+      background: rgba(99,179,237,0.08);
+      color: var(--cyan);
+      border: 1px solid rgba(99,179,237,0.15);
+      text-transform: uppercase;
+    }
+
+    .post-title {
+      font-family: var(--serif);
+      font-size: clamp(22px, 3vw, 30px);
+      font-weight: 400;
+      line-height: 1.25;
+      color: var(--text);
+      margin-bottom: 16px;
+    }
+
+    .post-excerpt {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.7;
+      margin-bottom: 28px;
+    }
+
+    .post-meta {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--muted2);
+    }
+
+    .post-meta-sep { opacity: 0.4; }
+
+    .read-more {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--cyan);
+      text-decoration: none;
+      margin-top: 24px;
+      transition: gap var(--transition);
+    }
+
+    .read-more:hover { gap: 10px; }
+
+    /* ── POST GRID ─────────────────────────────────── */
+    .posts-section {
+      padding: 20px 0 80px;
+    }
+
+    .posts-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-bottom: 40px;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .posts-header .section-title { margin-bottom: 0; }
+
+    .posts-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .post-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      text-decoration: none;
+      color: inherit;
+      transition: border-color var(--transition), transform var(--transition), background var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .post-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--cyan) 0%, transparent 100%);
+      opacity: 0;
+      transition: opacity var(--transition);
+    }
+
+    .post-card:hover {
+      border-color: var(--border2);
+      transform: translateY(-3px);
+      background: var(--bg3);
+    }
+
+    .post-card:hover::before {
+      opacity: 1;
+    }
+
+    .card-glyph {
+      font-family: var(--mono);
+      font-size: 36px;
+      color: rgba(99,179,237,0.15);
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+
+    .card-title {
+      font-family: var(--serif);
+      font-size: 19px;
+      font-weight: 400;
+      line-height: 1.3;
+      color: var(--text);
+    }
+
+    .card-excerpt {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.65;
+      flex: 1;
+    }
+
+    .card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 14px;
+      border-top: 1px solid var(--border);
+    }
+
+    .card-date {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--muted2);
+    }
+
+    .card-arrow {
+      font-size: 16px;
+      color: var(--cyan);
+      opacity: 0;
+      transform: translateX(-4px);
+      transition: opacity var(--transition), transform var(--transition);
+    }
+
+    .post-card:hover .card-arrow {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    /* ── ABOUT ─────────────────────────────────────── */
+    .about-section {
+      padding: 80px 0;
+      border-top: 1px solid var(--border);
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 80px;
+      align-items: start;
+    }
+
+    .about-sidebar {
+      position: sticky;
+      top: 80px;
+    }
+
+    .about-avatar {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      border: 2px solid var(--border2);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--bg3);
+      font-family: var(--mono);
+      font-size: 28px;
+      color: var(--cyan);
+      font-weight: 500;
+      overflow: hidden;
+    }
+
+    .about-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .about-name {
+      font-family: var(--serif);
+      font-size: 22px;
+      font-weight: 400;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+
+    .about-role {
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--cyan);
+      letter-spacing: 0.04em;
+      margin-bottom: 20px;
+    }
+
+    .social-links {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 24px;
+    }
+
+    .social-link {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+      color: var(--muted);
+      text-decoration: none;
+      padding: 8px 12px;
+      border-radius: var(--radius);
+      border: 1px solid transparent;
+      transition: all var(--transition);
+    }
+
+    .social-link:hover {
+      color: var(--cyan);
+      border-color: var(--border2);
+      background: var(--cyan-glow);
+    }
+
+    .social-icon {
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--cyan);
+      width: 20px;
+      text-align: center;
+    }
+
+    .about-body h3 {
+      font-family: var(--serif);
+      font-size: 28px;
+      font-weight: 400;
+      color: var(--text);
+      margin-bottom: 20px;
+      line-height: 1.3;
+    }
+
+    .about-body p {
+      font-size: 15px;
+      color: var(--muted);
+      line-height: 1.8;
+      margin-bottom: 20px;
+    }
+
+    .about-body p:last-of-type { margin-bottom: 32px; }
+
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-top: 32px;
+    }
+
+    .skill-chip {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 16px;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      font-size: 13px;
+      color: var(--muted);
+      transition: border-color var(--transition), color var(--transition);
+    }
+
+    .skill-chip:hover {
+      border-color: var(--border2);
+      color: var(--text);
+    }
+
+    .skill-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--cyan);
+      flex-shrink: 0;
+    }
+
+    /* ── PROJECTS ──────────────────────────────────── */
+    .projects-section {
+      padding: 80px 0;
+      border-top: 1px solid var(--border);
+    }
+
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+
+    .project-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      text-decoration: none;
+      color: inherit;
+      transition: all var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .project-card:hover {
+      border-color: var(--border2);
+      transform: translateY(-2px);
+    }
+
+    .project-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .project-icon {
+      font-family: var(--mono);
+      font-size: 22px;
+      color: var(--cyan);
+    }
+
+    .project-status {
+      font-family: var(--mono);
+      font-size: 11px;
+      padding: 3px 10px;
+      border-radius: 4px;
+      background: rgba(99,179,237,0.08);
+      color: var(--cyan);
+      border: 1px solid rgba(99,179,237,0.15);
+    }
+
+    .project-title {
+      font-family: var(--serif);
+      font-size: 21px;
+      font-weight: 400;
+      color: var(--text);
+      line-height: 1.3;
+    }
+
+    .project-desc {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .project-tech {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+      margin-top: auto;
+    }
+
+    .tech-badge {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--muted2);
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.07);
+      padding: 3px 9px;
+      border-radius: 4px;
+    }
+
+    .project-findings {
+      display: flex;
+      gap: 12px;
+      margin: 14px 0 4px;
+      flex-wrap: wrap;
+    }
+
+    .finding-stat {
+      background: var(--bg);
+      border: 1px solid var(--border2);
+      border-radius: var(--radius);
+      padding: 10px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      flex: 1;
+      min-width: 120px;
+    }
+
+    .finding-num {
+      font-family: var(--mono);
+      font-size: 20px;
+      font-weight: 500;
+      color: var(--cyan);
+    }
+
+    .finding-label {
+      font-size: 11px;
+      color: var(--muted2);
+      line-height: 1.4;
+    }
+
+    .project-blog-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--cyan);
+      text-decoration: none;
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+      width: 100%;
+      transition: gap 0.2s;
+    }
+
+    .project-blog-link:hover { gap: 10px; }
+
+    /* ── NEWSLETTER / CONTACT ──────────────────────── */
+    .contact-section {
+      padding: 80px 0 100px;
+      border-top: 1px solid var(--border);
+    }
+
+    .contact-card {
+      background: var(--bg2);
+      border: 1px solid var(--border2);
+      border-radius: var(--radius-lg);
+      padding: 64px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .contact-card::before {
+      content: '';
+      position: absolute;
+      top: -80px; left: 50%;
+      transform: translateX(-50%);
+      width: 400px; height: 200px;
+      background: radial-gradient(ellipse, rgba(99,179,237,0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .contact-card h2 {
+      font-family: var(--serif);
+      font-size: clamp(28px, 4vw, 42px);
+      font-weight: 400;
+      color: var(--text);
+      margin-bottom: 16px;
+      line-height: 1.2;
+    }
+
+    .contact-card p {
+      font-size: 15px;
+      color: var(--muted);
+      max-width: 440px;
+      margin-bottom: 36px;
+      line-height: 1.65;
+    }
+
+    .contact-links {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    /* ── FOOTER ────────────────────────────────────── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 28px 0;
+    }
+
+    .footer-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .footer-logo {
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--muted2);
+    }
+
+    .footer-copy {
+      font-size: 12px;
+      color: var(--muted2);
+    }
+
+    /* ── DIVIDER ───────────────────────────────────── */
+    .divider {
+      height: 1px;
+      background: var(--border);
+      margin: 0;
+    }
+
+    /* ── ANIMATIONS ────────────────────────────────── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .animate {
+      opacity: 0;
+      animation: fadeUp 0.6s cubic-bezier(0.4,0,0.2,1) forwards;
+    }
+
+    .delay-1 { animation-delay: 0.1s; }
+    .delay-2 { animation-delay: 0.2s; }
+    .delay-3 { animation-delay: 0.3s; }
+    .delay-4 { animation-delay: 0.4s; }
+
+    /* ── MOBILE ────────────────────────────────────── */
+    @media (max-width: 900px) {
+      .featured-card { grid-template-columns: 1fr; }
+      .featured-img  { min-height: 220px; }
+      .posts-grid    { grid-template-columns: 1fr 1fr; }
+      .about-grid    { grid-template-columns: 1fr; gap: 40px; }
+      .about-sidebar { position: static; }
+      .projects-grid { grid-template-columns: 1fr; }
+      .contact-card  { padding: 40px 24px; }
+    }
+
+    @media (max-width: 600px) {
+      .posts-grid    { grid-template-columns: 1fr; }
+      .skills-grid   { grid-template-columns: 1fr; }
+      .nav-links li:not(:last-child) { display: none; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-inner">
+      <a href="#" class="nav-logo">zero_doh.blog</a>
+      <ul class="nav-links">
+        <li><a href="#posts">Posts</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#projects">Research</a></li>
+        <li><a href="#contact" class="nav-cta">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <div class="page-wrap">
+    <section class="hero">
+      <p class="hero-eyebrow animate">Security engineering  Cloud  Detection</p>
+      <h1 class="animate delay-1">Insights from the <em>trenches</em> of cloud security</h1>
+      <p class="hero-desc animate delay-2">
+        Field notes, research, and hard-won lessons from 15+ years securing cloud infrastructure,
+        building detections, and fighting complexity with clarity.
+      </p>
+      <div class="hero-actions animate delay-3">
+        <a href="#posts" class="btn btn-primary">Read the blog</a>
+        <a href="#about" class="btn btn-ghost">About Shannon</a>
+      </div>
+      <div class="hero-stat-row animate delay-4">
+        <div class="hero-stat">
+          <span class="hero-stat-num">15+</span>
+          <span class="hero-stat-label">Years in security</span>
+        </div>
+        <div class="hero-stat">
+          <span class="hero-stat-num">AWS</span>
+          <span class="hero-stat-label">GCP  Cloud</span>
+        </div>
+        <div class="hero-stat">
+          <span class="hero-stat-num">CSPM</span>
+          <span class="hero-stat-label">Detection  IAM</span>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- FEATURED POST -->
+  <div class="page-wrap">
+    <section class="featured-section" id="posts">
+      <p class="section-label">Featured</p>
+      <a href="/posts/cybersecurity-trends-2026/" class="featured-card">
+        <div class="featured-img">
+          <div class="featured-img-inner">
+            <span class="featured-img-glyph">0xSEC</span>
+          </div>
+          <span class="featured-img-badge">New  2026</span>
+        </div>
+        <div class="featured-body">
+          <div class="post-tags">
+            <span class="tag">AI</span>
+            <span class="tag">Supply Chain</span>
+            <span class="tag">Identity</span>
+            <span class="tag">Quantum</span>
+          </div>
+          <h2 class="post-title">Top Cybersecurity Trends to Watch in 2026</h2>
+          <p class="post-excerpt">
+            Supply chain attacks quadrupled. AI governance fell behind adoption. North America became
+            the most attacked region for the first time in six years. Here's what's actually defining
+            the threat landscape in 2026, grounded in IBM X-Force and WEF intelligence.
+          </p>
+          <div class="post-meta">
+            <span>March 21, 2026</span>
+            <span>5 min read</span>
+          </div>
+          <span class="read-more">Read article →</span>
+        </div>
+      </a>
+    </section>
+  </div>
+
+  <!-- POSTS GRID -->
+  <div class="page-wrap">
+    <section class="posts-section">
+      <div class="posts-header">
+        <div>
+          <p class="section-label">Latest posts</p>
+          <h2 class="section-title">All writing</h2>
+        </div>
+      </div>
+
+      <div class="posts-grid">
+
+        <a href="/posts/cybersecurity-trends-2025/" class="post-card">
+          <div class="card-glyph">01</div>
+          <div class="post-tags">
+            <span class="tag">Trends</span>
+            <span class="tag">AI</span>
+          </div>
+          <h3 class="card-title">Top Cybersecurity Trends 2025</h3>
+          <p class="card-excerpt">
+            AI-powered attacks, Zero Trust by default, RaaS evolution, and more.
+            What security teams were watching in 2025.
+          </p>
+          <div class="card-footer">
+            <span class="card-date">May 10, 2025</span>
+            <span class="card-arrow">→</span>
+          </div>
+        </a>
+
+        <a href="/posts/cybersecurity-trends-2026/" class="post-card">
+          <div class="card-glyph">02</div>
+          <div class="post-tags">
+            <span class="tag">Trends</span>
+            <span class="tag">AI</span>
+            <span class="tag">Supply Chain</span>
+          </div>
+          <h3 class="card-title">Top Cybersecurity Trends 2026</h3>
+          <p class="card-excerpt">
+            Supply chain attacks quadrupled, AI governance is lagging, and North America
+            is now the most attacked region. Updated for 2026 from IBM X-Force &amp; WEF intelligence.
+          </p>
+          <div class="card-footer">
+            <span class="card-date">March 21, 2026</span>
+            <span class="card-arrow">→</span>
+          </div>
+        </a>
+
+      </div>
+    </section>
+  </div>
+
+  <!-- ABOUT -->
+  <div class="page-wrap">
+    <section class="about-section" id="about">
+      <div class="about-grid">
+
+        <div class="about-sidebar">
+          <div class="about-avatar">
+            <img src="/images/zerodoh.jpg" alt="Shannon Agarwal" onerror="this.style.display='none';this.parentNode.textContent='SA'" />
+          </div>
+          <h3 class="about-name">Shannon Agarwal</h3>
+          <p class="about-role">// Senior Cloud Security Engineer</p>
+          <div class="social-links">
+            <a href="https://github.com/shannon-encrypt" class="social-link" target="_blank" rel="noopener">
+              <span class="social-icon">&gt;_</span>
+              GitHub
+            </a>
+            <a href="https://www.linkedin.com/in/shannonagarwal/" class="social-link" target="_blank" rel="noopener">
+              <span class="social-icon">in</span>
+              LinkedIn
+            </a>
+          </div>
+        </div>
+
+        <div class="about-body">
+          <p class="section-label">About</p>
+          <h3>15 years of securing the things that matter</h3>
+          <p>
+            I'm a Senior Cloud Security Engineer based in the San Francisco Bay Area. My work lives at
+            the intersection of cloud infrastructure, detection engineering, and identity: the messy,
+            important layers where real security happens.
+          </p>
+          <p>
+            I've spent years building security programs at scale: standing up CSPM from scratch,
+            operationalizing vulnerability management, writing detections that actually fire on
+            the right things, and hardening SaaS sprawl before it becomes a headline.
+          </p>
+          <p>
+            The Zero Doh Blog is where I share field notes: what worked, what didn't, and what
+            I wish someone had written down before I had to figure it out the hard way.
+          </p>
+
+          <div class="skills-grid">
+            <div class="skill-chip"><span class="skill-dot"></span>CSPM &amp; Cloud Security</div>
+            <div class="skill-chip"><span class="skill-dot"></span>Detection Engineering</div>
+            <div class="skill-chip"><span class="skill-dot"></span>AWS / GCP Infrastructure</div>
+            <div class="skill-chip"><span class="skill-dot"></span>IAM &amp; Identity (Okta, Entra)</div>
+            <div class="skill-chip"><span class="skill-dot"></span>Vulnerability Management</div>
+            <div class="skill-chip"><span class="skill-dot"></span>Container Security</div>
+            <div class="skill-chip"><span class="skill-dot"></span>Splunk / SIEM</div>
+            <div class="skill-chip"><span class="skill-dot"></span>Terraform / IaC</div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+  </div>
+
+  <!-- PROJECTS -->
+  <div class="page-wrap">
+    <section class="projects-section" id="projects">
+      <p class="section-label">Research &amp; Projects</p>
+      <h2 class="section-title">Selected work</h2>
+
+      <div class="projects-grid">
+
+        <div class="project-card">
+          <div class="project-header">
+            <span class="project-icon">[AI]</span>
+            <a href="/posts/llm-nondeterminism-study/" class="project-status" style="text-decoration:none;">Read blog →</a>
+          </div>
+          <h3 class="project-title">LLM Audit Non-Determinism Study</h3>
+          <p class="project-desc">
+            Ran the same AI security audit 25 times on identical code to measure non-determinism in
+            LLM-based vulnerability detection. Built a vulnerable Flask app with 9 documented flaws
+            including hardcoded credentials (CWE-798) and broken authentication (CWE-287, CWE-330,
+            CWE-208) then sent it to the Claude API 25 times with byte-for-byte identical input each run.
+          </p>
+          <div class="project-findings">
+            <div class="finding-stat">
+              <span class="finding-num">100%</span>
+              <span class="finding-label">Detection rate across all 25 runs</span>
+            </div>
+            <div class="finding-stat">
+              <span class="finding-num">16.6%</span>
+              <span class="finding-label">Token count variance on identical input</span>
+            </div>
+          </div>
+          <p class="project-desc" style="margin-top: 12px;">
+            Every vulnerability was caught every time, but non-determinism showed up as verbosity
+            variance: 1,167 to 1,376 tokens per run on the same input. The test bugs were syntactically
+            obvious, pure pattern recognition. The real risk is subtler bugs: timing attacks buried in
+            business logic, IDORs that require understanding your data model, auth bypasses that only
+            trigger under specific conditions. That's where token sampling variance becomes detection
+            variance, where a critical vulnerability appears in 18 of 25 runs and you have no idea
+            which run caught it. A single AI audit pass is not enough for logic-level vulnerabilities.
+          </p>
+          <div class="project-tech">
+            <span class="tech-badge">Python</span>
+            <span class="tech-badge">Flask</span>
+            <span class="tech-badge">Anthropic API</span>
+            <span class="tech-badge">Claude Sonnet</span>
+            <span class="tech-badge">CWE / NIST</span>
+          </div>
+          <a href="https://www.linkedin.com/posts/shannon-agarwal_cybersecurity-appsec-ai-activity-7435019294989713408-b54r?utm_source=share&utm_medium=member_desktop&rcm=ACoAAADeoPMB-qi6yvRO_TTyywU8V0qBjgsBsiM" target="_blank" rel="noopener" class="project-blog-link">Read the full write-up →</a>
+        </div>
+
+        <div class="project-card">
+          <div class="project-header">
+            <span class="project-icon">[VM]</span>
+            <span class="project-status">Completed</span>
+          </div>
+          <h3 class="project-title">Vulnerability Management Program</h3>
+          <p class="project-desc">
+            Designed and implemented a comprehensive vulnerability management program from scratch,
+            including process flows, risk prioritization, and executive reporting, aligned with
+            FedRAMP High requirements and NIST 800-53.
+          </p>
+          <div class="project-tech">
+            <span class="tech-badge">Terraform</span>
+            <span class="tech-badge">CrowdStrike</span>
+            <span class="tech-badge">Tenable</span>
+            <span class="tech-badge">AWS</span>
+          </div>
+        </div>
+
+        <div class="project-card">
+          <div class="project-header">
+            <span class="project-icon">[DET]</span>
+            <span class="project-status">Active</span>
+          </div>
+          <h3 class="project-title">Splunk Detection Engineering</h3>
+          <p class="project-desc">
+            Building cloud-native detections covering SaaS integration abuse, proactive IP anomaly
+            alerting, and Salesforce integration security with Okta Behavior Detection integration.
+          </p>
+          <div class="project-tech">
+            <span class="tech-badge">Splunk</span>
+            <span class="tech-badge">Okta</span>
+            <span class="tech-badge">SIEM</span>
+            <span class="tech-badge">Salesforce</span>
+          </div>
+        </div>
+
+        <div class="project-card">
+          <div class="project-header">
+            <span class="project-icon">[IAM]</span>
+            <span class="project-status">Completed</span>
+          </div>
+          <h3 class="project-title">Okta Migration &amp; MFA Enforcement</h3>
+          <p class="project-desc">
+            Okta migration of ~300 users from Google Workspace at Code for America, plus MFA
+            enforcement gap analysis and Behavior Detection recommendations for enterprise environments.
+          </p>
+          <div class="project-tech">
+            <span class="tech-badge">Okta</span>
+            <span class="tech-badge">SAML / SCIM</span>
+            <span class="tech-badge">Microsoft Entra</span>
+            <span class="tech-badge">MFA</span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+  </div>
+
+  <!-- CONTACT -->
+  <div class="page-wrap">
+    <section class="contact-section" id="contact">
+      <div class="contact-card">
+        <p class="section-label" style="margin-bottom:16px;">Get in touch</p>
+        <h2>Let's talk security</h2>
+        <p>
+          Whether it's a question about cloud security architecture, detection engineering,
+          or just wanting to connect, I'm always up for a good conversation.
+        </p>
+        <div class="contact-links">
+          <a href="https://www.linkedin.com/in/shannonagarwal/" class="btn btn-primary" target="_blank" rel="noopener">
+            LinkedIn →
+          </a>
+          <a href="https://github.com/shannon-encrypt" class="btn btn-ghost" target="_blank" rel="noopener">
+            GitHub
+          </a>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <span class="footer-logo">// zero_doh.blog</span>
+      <span class="footer-copy">© 2025 Shannon Agarwal. All rights reserved.</span>
+    </div>
+  </footer>
+
+</body>
+</html>
