@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Top Cybersecurity Trends to Watch in 2026 | The Zero Doh Blog</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:       #0b0f18;
+      --bg2:      #111827;
+      --bg3:      #1a2235;
+      --border:   rgba(99,179,237,0.12);
+      --border2:  rgba(99,179,237,0.22);
+      --cyan:     #63b3ed;
+      --cyan-dim: rgba(99,179,237,0.55);
+      --cyan-glow:rgba(99,179,237,0.08);
+      --text:     #e2e8f0;
+      --muted:    #8899aa;
+      --muted2:   #5a6b80;
+      --serif:    'DM Serif Display', serif;
+      --mono:     'DM Mono', monospace;
+      --sans:     'Manrope', sans-serif;
+      --radius:   10px;
+      --radius-lg:16px;
+      --max-prose: 720px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      font-size: 16px;
+      line-height: 1.75;
+      min-height: 100vh;
+    }
+
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none; z-index: 0; opacity: 0.55;
+    }
+
+    body::after {
+      content: '';
+      position: fixed; inset: 0;
+      background-image:
+        linear-gradient(rgba(99,179,237,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(99,179,237,0.03) 1px, transparent 1px);
+      background-size: 48px 48px;
+      pointer-events: none; z-index: 0;
+    }
+
+    /* NAV */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(11,15,24,0.88);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-inner {
+      max-width: 1100px; margin: 0 auto; padding: 0 24px;
+      height: 60px; display: flex; align-items: center; justify-content: space-between;
+    }
+
+    .nav-logo {
+      font-family: var(--mono); font-size: 13px; font-weight: 500;
+      color: var(--cyan); text-decoration: none; letter-spacing: 0.04em;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .nav-logo::before { content: '>'; opacity: 0.5; }
+
+    .nav-links { display: flex; align-items: center; gap: 8px; list-style: none; }
+    .nav-links a {
+      color: var(--muted); text-decoration: none; font-size: 13px; font-weight: 500;
+      letter-spacing: 0.02em; padding: 6px 14px; border-radius: 6px;
+      transition: color 0.2s, background 0.2s;
+    }
+    .nav-links a:hover { color: var(--text); background: var(--bg3); }
+
+    /* PAGE WRAP */
+    .page-wrap { position: relative; z-index: 1; max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+
+    /* POST HEADER */
+    .post-header {
+      max-width: var(--max-prose);
+      margin: 0 auto;
+      padding: 72px 0 48px;
+    }
+
+    .back-link {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-family: var(--mono); font-size: 12px; color: var(--muted2);
+      text-decoration: none; margin-bottom: 40px;
+      transition: color 0.2s;
+    }
+    .back-link:hover { color: var(--cyan); }
+
+    .post-tags {
+      display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 24px;
+    }
+
+    .tag {
+      font-family: var(--mono); font-size: 11px; font-weight: 500;
+      letter-spacing: 0.06em; padding: 3px 10px; border-radius: 4px;
+      background: rgba(99,179,237,0.08); color: var(--cyan);
+      border: 1px solid rgba(99,179,237,0.15); text-transform: uppercase;
+    }
+
+    .post-header h1 {
+      font-family: var(--serif);
+      font-size: clamp(34px, 5vw, 52px);
+      font-weight: 400; line-height: 1.12;
+      color: var(--text); letter-spacing: -0.02em;
+      margin-bottom: 24px;
+    }
+
+    .post-meta {
+      display: flex; align-items: center; gap: 16px;
+      font-family: var(--mono); font-size: 12px; color: var(--muted2);
+      padding-bottom: 40px; border-bottom: 1px solid var(--border);
+    }
+
+    .post-meta-sep { opacity: 0.4; }
+
+    /* HERO BANNER */
+    .post-banner {
+      max-width: var(--max-prose); margin: 0 auto 56px;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      height: 240px;
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden; position: relative;
+    }
+
+    .banner-bg {
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, #1a2b45 0%, #0f1e35 60%, #0d1929 100%);
+    }
+
+    .banner-glyph {
+      font-family: var(--mono); font-size: 96px;
+      color: rgba(99,179,237,0.07); line-height: 1;
+      position: relative; z-index: 1; user-select: none;
+      letter-spacing: -0.05em;
+    }
+
+    .banner-year {
+      position: absolute; bottom: 20px; right: 24px;
+      font-family: var(--mono); font-size: 12px; color: var(--cyan);
+      z-index: 1; letter-spacing: 0.1em;
+    }
+
+    /* PROSE */
+    .post-body {
+      max-width: var(--max-prose);
+      margin: 0 auto;
+      padding-bottom: 100px;
+    }
+
+    .post-body p {
+      color: var(--muted); font-size: 16px; line-height: 1.8;
+      margin-bottom: 20px;
+    }
+
+    .post-body h2 {
+      font-family: var(--serif);
+      font-size: clamp(22px, 3vw, 28px);
+      font-weight: 400; color: var(--text);
+      margin: 52px 0 16px; line-height: 1.25;
+    }
+
+    .post-body h2 .num {
+      font-family: var(--mono); font-size: 13px;
+      color: var(--cyan); margin-right: 12px;
+      font-weight: 500; vertical-align: middle;
+    }
+
+    .post-body hr {
+      border: none; border-top: 1px solid var(--border);
+      margin: 44px 0;
+    }
+
+    /* CALLOUT BOXES */
+    .callout {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--cyan);
+      border-radius: 0 var(--radius) var(--radius) 0;
+      padding: 20px 24px;
+      margin: 28px 0;
+      font-size: 14px; color: var(--muted); line-height: 1.7;
+    }
+
+    .callout strong {
+      display: block; margin-bottom: 6px;
+      font-family: var(--mono); font-size: 11px;
+      color: var(--cyan); letter-spacing: 0.08em; text-transform: uppercase;
+    }
+
+    /* STAT CHIPS */
+    .stat-row {
+      display: flex; flex-wrap: wrap; gap: 12px;
+      margin: 24px 0 32px;
+    }
+
+    .stat-chip {
+      background: var(--bg2); border: 1px solid var(--border2);
+      border-radius: var(--radius); padding: 14px 20px;
+      display: flex; flex-direction: column; gap: 4px;
+      min-width: 140px;
+    }
+
+    .stat-num {
+      font-family: var(--mono); font-size: 22px;
+      font-weight: 500; color: var(--text);
+    }
+
+    .stat-label {
+      font-size: 12px; color: var(--muted2);
+    }
+
+    /* CODE BLOCK */
+    .code-block {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px 24px; margin: 24px 0;
+      overflow-x: auto;
+    }
+
+    .code-block pre {
+      font-family: var(--mono); font-size: 13px;
+      color: #a8d8a8; line-height: 1.7; white-space: pre;
+    }
+
+    .code-label {
+      font-family: var(--mono); font-size: 11px;
+      color: var(--muted2); margin-bottom: 12px;
+      letter-spacing: 0.06em; text-transform: uppercase;
+    }
+
+    /* BULLET LIST */
+    .post-body ul {
+      margin: 16px 0 20px 0; padding: 0;
+      list-style: none; display: flex; flex-direction: column; gap: 10px;
+    }
+
+    .post-body li {
+      display: flex; align-items: flex-start; gap: 12px;
+      font-size: 15px; color: var(--muted); line-height: 1.65;
+    }
+
+    .post-body li::before {
+      content: '→';
+      font-family: var(--mono); font-size: 13px;
+      color: var(--cyan); flex-shrink: 0; margin-top: 2px;
+    }
+
+    /* QUOTE */
+    blockquote {
+      border-left: 2px solid var(--cyan-dim);
+      margin: 28px 0;
+      padding: 4px 24px;
+    }
+
+    blockquote p {
+      font-family: var(--serif); font-size: 19px !important;
+      color: var(--text) !important; line-height: 1.5 !important;
+      font-style: italic; margin: 0 !important;
+    }
+
+    blockquote cite {
+      display: block; margin-top: 10px;
+      font-family: var(--mono); font-size: 12px;
+      color: var(--muted2); font-style: normal;
+    }
+
+    /* FINAL THOUGHTS */
+    .final-thoughts {
+      background: var(--bg2);
+      border: 1px solid var(--border2);
+      border-radius: var(--radius-lg);
+      padding: 36px 40px; margin-top: 48px;
+    }
+
+    .final-thoughts h2 {
+      margin-top: 0 !important;
+    }
+
+    /* FOOTER */
+    .post-footer {
+      max-width: var(--max-prose); margin: 0 auto;
+      padding: 40px 0 64px;
+      border-top: 1px solid var(--border);
+    }
+
+    .post-footer-nav {
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 16px;
+    }
+
+    .post-footer-back {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-family: var(--mono); font-size: 13px;
+      color: var(--cyan); text-decoration: none;
+      transition: gap 0.2s;
+    }
+    .post-footer-back:hover { gap: 12px; }
+
+    @media (max-width: 600px) {
+      .post-header, .post-body, .post-banner, .post-footer {
+        padding-left: 0; padding-right: 0;
+      }
+      .stat-row { flex-direction: column; }
+      .final-thoughts { padding: 24px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-inner">
+      <a href="/" class="nav-logo">zero_doh.blog</a>
+      <ul class="nav-links">
+        <li><a href="/#posts">Posts</a></li>
+        <li><a href="/#about">About</a></li>
+        <li><a href="/#projects">Research</a></li>
+        <li><a href="/#contact">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="page-wrap">
+
+    <!-- POST HEADER -->
+    <header class="post-header">
+      <a href="/" class="back-link">← Back to all posts</a>
+      <div class="post-tags">
+        <span class="tag">Cybersecurity</span>
+        <span class="tag">Trends</span>
+        <span class="tag">AI</span>
+        <span class="tag">Zero Trust</span>
+        <span class="tag">Supply Chain</span>
+        <span class="tag">Identity</span>
+      </div>
+      <h1>Top Cybersecurity Trends to Watch in 2026</h1>
+      <div class="post-meta">
+        <span>March 21, 2026</span>
+        <span>5 min read</span>
+        <span>Shannon Agarwal</span>
+      </div>
+    </header>
+
+    <!-- BANNER -->
+    <div class="post-banner">
+      <div class="banner-bg"></div>
+      <span class="banner-glyph">0xSEC</span>
+      <span class="banner-year">// 2026 edition</span>
+    </div>
+
+    <!-- BODY -->
+    <article class="post-body">
+
+      <p>
+        Last year I wrote about the trends shaping 2025. A lot of it held up. AI-powered attacks landed, Zero Trust kept expanding, and the RaaS ecosystem got worse before it got better. But the threat landscape moved faster than most predictions accounted for. So here's a grounded, updated look at what's actually defining cybersecurity in 2026, drawing on fresh intelligence from IBM X-Force, the WEF Global Cybersecurity Outlook, and what I'm seeing in the field.
+      </p>
+
+      <h2><span class="num">01.</span>AI Governance Has Become Urgent, Not Optional</h2>
+
+      <p>
+        In 2025 we talked about AI-powered attacks as an emerging risk. In 2026 they're table stakes. The more pressing problem is that companies raced to adopt AI without building governance frameworks around it, and now security teams are playing catch-up on both fronts simultaneously.
+      </p>
+
+      <div class="callout">
+        <strong>By the numbers</strong>
+        AI risk jumped from the #10 to #2 business concern in a single year, according to Allianz Commercial's survey of 3,300+ risk management professionals.
+      </div>
+
+      <p>
+        The attack surface has also shifted. It's not just phishing and malware anymore. AI agents embedded in business workflows are now credential gold mines. IBM X-Force found over 300,000 ChatGPT credentials listed for sale on the dark web in 2025 alone. Agentic AI platforms require broad data access to function, which makes any compromise immediately high-blast-radius.
+      </p>
+
+      <p>
+        The practical ask for defenders: implement access controls and data provenance protections for every AI system, require adversarial testing before production deployment, and govern AI agent permissions with the same rigor you'd apply to a privileged service account.
+      </p>
+
+      <h2><span class="num">02.</span>Supply Chain Attacks Have Quadrupled in Five Years</h2>
+
+      <p>
+        This is the trend that IBM X-Force's 2026 Threat Intelligence Index puts front and center, and it's one I think gets underestimated because it doesn't look like a traditional breach. Attackers aren't breaking down the front door. They're walking through the supplier's back door with valid credentials.
+      </p>
+
+      <blockquote>
+        <p>"Attackers have figured out that they don't need to break through your carefully guarded front door when they can walk right in through your supplier's back door with valid credentials."</p>
+        <cite>Nick Bradley, Director, IBM X-Force Threat Intelligence Malware Team</cite>
+      </blockquote>
+
+      <p>
+        Modern software runs on sprawling webs of dependencies, cloud services, and APIs. A compromised OAuth token in a third-party integration can cascade into full customer environment access. IBM X-Force documented exactly this pattern with Salesloft/Drift/Salesforce incidents. Third-party involvement in breaches doubled to 30% year-over-year according to Verizon's 2025 DBIR.
+      </p>
+
+      <ul>
+        <li>Audit and inventory every third-party integration, especially OAuth grants and API connections</li>
+        <li>Enforce MFA and patch SLAs contractually with vendors</li>
+        <li>Monitor for anomalous activity from trusted integrations, not just external threats</li>
+        <li>Review CI/CD pipeline security; compromised build tooling is a force multiplier</li>
+      </ul>
+
+      <h2><span class="num">03.</span>Public-Facing Application Exploitation Is Surging</h2>
+
+      <p>
+        IBM X-Force recorded a 44% year-over-year increase in exploitation of public-facing applications. What's striking is the mechanism: 56% of the nearly 40,000 vulnerabilities tracked in 2025 could be exploited without any authentication. No credentials needed, no MFA to bypass, no user interaction required.
+      </p>
+
+      <div class="stat-row">
+        <div class="stat-chip">
+          <span class="stat-num">+44%</span>
+          <span class="stat-label">YoY increase in public app exploitation</span>
+        </div>
+        <div class="stat-chip">
+          <span class="stat-num">56%</span>
+          <span class="stat-label">Of vulns exploitable without auth</span>
+        </div>
+        <div class="stat-chip">
+          <span class="stat-num">29%</span>
+          <span class="stat-label">Of all IR cases: North America</span>
+        </div>
+      </div>
+
+      <p>
+        The takeaway isn't that sophisticated threats don't exist. It's that organizations are losing to adversaries who are taking advantage of simple, preventable gaps. Vulnerability patching and identity hardening aren't competing priorities; they're parallel ones.
+      </p>
+
+      <div class="code-block">
+        <div class="code-label">example: unauthenticated vuln triage query (Splunk)</div>
+        <pre>index=vuln_scans authentication_required=false severity IN ("critical","high")
+| stats count by cve, asset, last_seen
+| where last_seen > relative_time(now(), "-7d")
+| sort -count</pre>
+      </div>
+
+      <h2><span class="num">04.</span>Identity Is the New Perimeter and It's Sprawling</h2>
+
+      <p>
+        Zero Trust has been the mantra for several years, but in 2026 the execution gap is widening. The problem isn't that organizations don't believe in Zero Trust. It's that identity sprawl makes it brutally hard to implement consistently at scale. Human identities, machine identities, service accounts, API keys, AI agent credentials: the surface area keeps growing.
+      </p>
+
+      <p>
+        North America becoming the most-attacked region for the first time in six years is partly a story about identity. As IBM X-Force noted, attackers don't need zero-days in highly cloud-connected environments. They just need valid credentials and patience. The region's heavy reliance on SaaS, third-party access, and federated identity creates compounding exposure when those controls aren't consistently enforced.
+      </p>
+
+      <ul>
+        <li>Adopt passwordless authentication wherever possible</li>
+        <li>Rotate secrets automatically; treat static credentials as a liability</li>
+        <li>Govern machine identities with the same rigor as human accounts</li>
+        <li>Enforce phishing-resistant MFA. SMS OTP is no longer sufficient for high-value targets</li>
+      </ul>
+
+      <h2><span class="num">05.</span>Quantum-Resistant Cryptography: The Inflection Point Is Now</h2>
+
+      <p>
+        Post-quantum cryptography moved from theoretical to operational in 2025 when NIST finalized its first PQC standards (ML-KEM, ML-DSA, SLH-DSA). Adoption is accelerating across finance, defense, and cloud providers. The challenge in 2026 is that government-issued ID cards and passports are still in limbo. ICAO hasn't standardized PQC algorithms for travel documents yet, leaving that ecosystem waiting.
+      </p>
+
+      <p>
+        For most organizations, the practical priority isn't replacing everything today. It's crypto-agility: building systems that can swap algorithms without full re-architecture. Harvest-now-decrypt-later attacks make this urgent for any long-lived sensitive data.
+      </p>
+
+      <div class="code-block">
+        <div class="code-label">example: ML-KEM key encapsulation (liboqs python)</div>
+        <pre>from oqs import KeyEncapsulation
+
+kem = KeyEncapsulation('ML-KEM-768')
+public_key = kem.generate_keypair()
+ciphertext, shared_secret = kem.encap_secret(public_key)
+# Peer decapsulates with kem.decap_secret(ciphertext)</pre>
+      </div>
+
+      <h2><span class="num">06.</span>Cybersecurity Hygiene Remains the #1 Failure Mode</h2>
+
+      <p>
+        Every year this feels like the unsexy trend, and every year it's the one that explains the most breaches. IBM X-Force found that across all regions and attack types, security incidents consistently stemmed from lapses in basic hygiene: unpatched systems, identity sprawl, misconfigured tools deployed without ongoing governance.
+      </p>
+
+      <p>
+        The problem is structural: modern environments are too complex for manual oversight, and security tools are often deployed without continuous governance. Automation is the answer, but only when it's built on accurate asset inventories and consistent configuration management.
+      </p>
+
+      <ul>
+        <li>Accurate, continuously updated asset inventory. You can't protect what you can't see</li>
+        <li>Timely removal of outdated or unused systems before they become liabilities</li>
+        <li>Continuous, automated configuration validation against your security baseline</li>
+        <li>Don't let the sophisticated threats distract from the simple ones. Most attackers don't need sophistication</li>
+      </ul>
+
+      <h2><span class="num">07.</span>Regulatory Landscape: Compliance Is Catching Up to Reality</h2>
+
+      <p>
+        The regulatory environment shifted materially in 2026. The EU Cyber Resilience Act hit its first enforcement milestone. As of September 2026, manufacturers must begin vulnerability reporting under the CRA, with full obligations kicking in by end of 2027. The EU AI Act is shaping AI governance requirements. US state privacy laws in Indiana, Kentucky, Rhode Island and Connecticut expanded what counts as sensitive data, including precise geolocation and neural data.
+      </p>
+
+      <p>
+        The practical implication is that regulatory readiness and cyber readiness are no longer separate conversations. Security teams need to own compliance posture, not just hand off to legal. Multi-region operations face layered, sometimes conflicting requirements and that complexity isn't going away.
+      </p>
+
+      <div class="final-thoughts">
+        <h2>Final thoughts</h2>
+        <p>
+          Cybersecurity in 2026 is a story about speed and complexity outpacing controls. AI adoption moved faster than governance could follow. Supply chains grew more interconnected than anyone mapped. Identity sprawled faster than teams could govern it. The organizations holding the line aren't necessarily the ones with the most sophisticated tools. They're the ones who did the boring work of getting the fundamentals consistently right.
+        </p>
+        <p style="margin-bottom: 0;">
+          Stay curious. Stay patched. Govern your AI before it governs your blast radius.
+        </p>
+      </div>
+
+    </article>
+
+    <!-- POST FOOTER -->
+    <div class="post-footer">
+      <div class="post-footer-nav">
+        <a href="/" class="post-footer-back">← Back to all posts</a>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <span class="tag">Cybersecurity</span>
+          <span class="tag">2026</span>
+          <span class="tag">AI</span>
+          <span class="tag">Supply Chain</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</body>
+</html>
