@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IAM Exposure on GitHub: What AI-Assisted Dorking Found in the Wild | The Zero Doh Blog</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:       #0b0f18;
+      --bg2:      #111827;
+      --bg3:      #1a2235;
+      --border:   rgba(99,179,237,0.12);
+      --border2:  rgba(99,179,237,0.22);
+      --cyan:     #63b3ed;
+      --cyan-dim: rgba(99,179,237,0.55);
+      --cyan-glow:rgba(99,179,237,0.08);
+      --text:     #e2e8f0;
+      --muted:    #8899aa;
+      --muted2:   #5a6b80;
+      --serif:    'DM Serif Display', serif;
+      --mono:     'DM Mono', monospace;
+      --sans:     'Manrope', sans-serif;
+      --radius:   10px;
+      --radius-lg:16px;
+      --max-prose: 720px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      font-size: 16px;
+      line-height: 1.75;
+      min-height: 100vh;
+    }
+
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none; z-index: 0; opacity: 0.55;
+    }
+
+    body::after {
+      content: '';
+      position: fixed; inset: 0;
+      background-image:
+        linear-gradient(rgba(99,179,237,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(99,179,237,0.03) 1px, transparent 1px);
+      background-size: 48px 48px;
+      pointer-events: none; z-index: 0;
+    }
+
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(11,15,24,0.88);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-inner {
+      max-width: 1100px; margin: 0 auto; padding: 0 24px;
+      height: 60px; display: flex; align-items: center; justify-content: space-between;
+    }
+
+    .nav-logo {
+      font-family: var(--mono); font-size: 13px; font-weight: 500;
+      color: var(--cyan); text-decoration: none; letter-spacing: 0.04em;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .nav-logo::before { content: '>'; opacity: 0.5; }
+
+    .nav-links { display: flex; align-items: center; gap: 8px; list-style: none; }
+    .nav-links a {
+      color: var(--muted); text-decoration: none; font-size: 13px; font-weight: 500;
+      letter-spacing: 0.02em; padding: 6px 14px; border-radius: 6px;
+      transition: color 0.2s, background 0.2s;
+    }
+    .nav-links a:hover { color: var(--text); background: var(--bg3); }
+
+    .page-wrap { position: relative; z-index: 1; max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+
+    .post-header {
+      max-width: var(--max-prose);
+      margin: 0 auto;
+      padding: 72px 0 48px;
+    }
+
+    .back-link {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-family: var(--mono); font-size: 12px; color: var(--muted2);
+      text-decoration: none; margin-bottom: 40px;
+      transition: color 0.2s;
+    }
+    .back-link:hover { color: var(--cyan); }
+
+    .post-tags {
+      display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 24px;
+    }
+
+    .tag {
+      font-family: var(--mono); font-size: 11px; font-weight: 500;
+      letter-spacing: 0.06em; padding: 3px 10px; border-radius: 4px;
+      background: rgba(99,179,237,0.08); color: var(--cyan);
+      border: 1px solid rgba(99,179,237,0.15); text-transform: uppercase;
+    }
+
+    .post-header h1 {
+      font-family: var(--serif);
+      font-size: clamp(34px, 5vw, 52px);
+      font-weight: 400; line-height: 1.12;
+      color: var(--text); letter-spacing: -0.02em;
+      margin-bottom: 24px;
+    }
+
+    .post-meta {
+      display: flex; align-items: center; gap: 16px;
+      font-family: var(--mono); font-size: 12px; color: var(--muted2);
+      padding-bottom: 40px; border-bottom: 1px solid var(--border);
+    }
+
+    .post-banner {
+      max-width: var(--max-prose); margin: 0 auto 56px;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      height: 240px;
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden; position: relative;
+    }
+
+    .banner-bg {
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, #1a2b45 0%, #0f1e35 60%, #0d1929 100%);
+    }
+
+    .banner-glyph {
+      font-family: var(--mono); font-size: 96px;
+      color: rgba(99,179,237,0.07); line-height: 1;
+      position: relative; z-index: 1; user-select: none;
+      letter-spacing: -0.05em;
+    }
+
+    .banner-year {
+      position: absolute; bottom: 20px; right: 24px;
+      font-family: var(--mono); font-size: 12px; color: var(--cyan);
+      z-index: 1; letter-spacing: 0.1em;
+    }
+
+    .post-body {
+      max-width: var(--max-prose);
+      margin: 0 auto;
+      padding-bottom: 100px;
+    }
+
+    .post-body p {
+      color: var(--muted); font-size: 16px; line-height: 1.8;
+      margin-bottom: 20px;
+    }
+
+    .post-body h2 {
+      font-family: var(--serif);
+      font-size: clamp(22px, 3vw, 28px);
+      font-weight: 400; color: var(--text);
+      margin: 52px 0 16px; line-height: 1.25;
+    }
+
+    .post-body h2 .num {
+      font-family: var(--mono); font-size: 13px;
+      color: var(--cyan); margin-right: 12px;
+      font-weight: 500; vertical-align: middle;
+    }
+
+    .post-body hr {
+      border: none; border-top: 1px solid var(--border);
+      margin: 44px 0;
+    }
+
+    .callout {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--cyan);
+      border-radius: 0 var(--radius) var(--radius) 0;
+      padding: 20px 24px;
+      margin: 28px 0;
+      font-size: 14px; color: var(--muted); line-height: 1.7;
+    }
+
+    .callout strong {
+      display: block; margin-bottom: 6px;
+      font-family: var(--mono); font-size: 11px;
+      color: var(--cyan); letter-spacing: 0.08em; text-transform: uppercase;
+    }
+
+    .stat-row {
+      display: flex; flex-wrap: wrap; gap: 12px;
+      margin: 24px 0 32px;
+    }
+
+    .stat-chip {
+      background: var(--bg2); border: 1px solid var(--border2);
+      border-radius: var(--radius); padding: 14px 20px;
+      display: flex; flex-direction: column; gap: 4px;
+      min-width: 140px;
+    }
+
+    .stat-num {
+      font-family: var(--mono); font-size: 22px;
+      font-weight: 500; color: var(--text);
+    }
+
+    .stat-label {
+      font-size: 12px; color: var(--muted2);
+    }
+
+    .code-block {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px 24px; margin: 24px 0;
+      overflow-x: auto;
+    }
+
+    .code-block pre {
+      font-family: var(--mono); font-size: 13px;
+      color: #a8d8a8; line-height: 1.7; white-space: pre;
+    }
+
+    .code-label {
+      font-family: var(--mono); font-size: 11px;
+      color: var(--muted2); margin-bottom: 12px;
+      letter-spacing: 0.06em; text-transform: uppercase;
+    }
+
+    .post-body ul {
+      margin: 16px 0 20px 0; padding: 0;
+      list-style: none; display: flex; flex-direction: column; gap: 10px;
+    }
+
+    .post-body li {
+      display: flex; align-items: flex-start; gap: 12px;
+      font-size: 15px; color: var(--muted); line-height: 1.65;
+    }
+
+    .post-body li::before {
+      content: '→';
+      font-family: var(--mono); font-size: 13px;
+      color: var(--cyan); flex-shrink: 0; margin-top: 2px;
+    }
+
+    blockquote {
+      border-left: 2px solid var(--cyan-dim);
+      margin: 28px 0;
+      padding: 4px 24px;
+    }
+
+    blockquote p {
+      font-family: var(--serif); font-size: 19px !important;
+      color: var(--text) !important; line-height: 1.5 !important;
+      font-style: italic; margin: 0 !important;
+    }
+
+    .data-table {
+      width: 100%; border-collapse: collapse;
+      margin: 20px 0 28px;
+      font-size: 14px;
+    }
+
+    .data-table th {
+      font-family: var(--mono); font-size: 11px;
+      color: var(--cyan); letter-spacing: 0.08em; text-transform: uppercase;
+      text-align: left; padding: 10px 16px;
+      border-bottom: 1px solid var(--border2);
+    }
+
+    .data-table td {
+      color: var(--muted); padding: 10px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .data-table tr:last-child td { border-bottom: none; }
+
+    .data-table td:last-child {
+      font-family: var(--mono); font-size: 13px;
+      color: var(--text);
+    }
+
+    .table-wrap {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      margin: 20px 0 28px;
+    }
+
+    .table-label {
+      font-family: var(--mono); font-size: 11px;
+      color: var(--muted2); padding: 12px 16px 0;
+      letter-spacing: 0.06em; text-transform: uppercase;
+    }
+
+    .disclosure-table {
+      width: 100%; border-collapse: collapse; font-size: 14px;
+    }
+
+    .disclosure-table td {
+      padding: 10px 16px; border-bottom: 1px solid var(--border);
+      color: var(--muted);
+    }
+
+    .disclosure-table tr:last-child td { border-bottom: none; }
+
+    .disclosure-table td:last-child {
+      font-family: var(--mono); font-size: 12px;
+      text-align: right;
+    }
+
+    .status-no { color: #f87171; }
+    .status-yes { color: #4ade80; }
+
+    .final-thoughts {
+      background: var(--bg2);
+      border: 1px solid var(--border2);
+      border-radius: var(--radius-lg);
+      padding: 36px 40px; margin-top: 48px;
+    }
+
+    .final-thoughts h2 { margin-top: 0 !important; }
+
+    .post-footer {
+      max-width: var(--max-prose); margin: 0 auto;
+      padding: 40px 0 64px;
+      border-top: 1px solid var(--border);
+    }
+
+    .post-footer-nav {
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 16px;
+    }
+
+    .post-footer-back {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-family: var(--mono); font-size: 13px;
+      color: var(--cyan); text-decoration: none;
+      transition: gap 0.2s;
+    }
+    .post-footer-back:hover { gap: 12px; }
+
+    code {
+      font-family: var(--mono); font-size: 13px;
+      background: var(--bg3); color: var(--cyan);
+      padding: 2px 6px; border-radius: 4px;
+    }
+
+    @media (max-width: 600px) {
+      .post-header, .post-body, .post-banner, .post-footer {
+        padding-left: 0; padding-right: 0;
+      }
+      .stat-row { flex-direction: column; }
+      .final-thoughts { padding: 24px; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="nav-inner">
+      <a href="/" class="nav-logo">zero_doh.blog</a>
+      <ul class="nav-links">
+        <li><a href="/#posts">Posts</a></li>
+        <li><a href="/#about">About</a></li>
+        <li><a href="/#projects">Research</a></li>
+        <li><a href="/#contact">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="page-wrap">
+
+    <header class="post-header">
+      <a href="/" class="back-link">← Back to all posts</a>
+      <div class="post-tags">
+        <span class="tag">AI</span>
+        <span class="tag">GitHub</span>
+        <span class="tag">IAM</span>
+        <span class="tag">Identity</span>
+        <span class="tag">Cloud Security</span>
+      </div>
+      <h1>IAM Exposure on GitHub: What AI-Assisted Dorking Found in the Wild</h1>
+      <div class="post-meta">
+        <span>March 22, 2026</span>
+        <span class="post-meta-sep">·</span>
+        <span>8 min read</span>
+        <span class="post-meta-sep">·</span>
+        <span>Shannon Agarwal</span>
+      </div>
+    </header>
+
+    <div class="post-banner">
+      <div class="banner-bg"></div>
+      <span class="banner-glyph">0xSEC</span>
+      <span class="banner-year">// research edition</span>
+    </div>
+
+    <article class="post-body">
+
+      <p>
+        I built a tool that searches GitHub for exposed credentials. Here's what it found in 30 minutes — and what happened when one of them turned out to be real.
+      </p>
+
+      <p>
+        This research uses an automated GitHub dorking pipeline to surface IAM credential exposure across public repositories. Each finding gets enriched by the Claude API: severity score, identity provider fingerprint, MITRE ATT&CK mapping, and remediation guidance. The goal wasn't just to find exposed secrets. It was to understand how well AI-assisted triage performs at scale, where it breaks down, and what the full responsible disclosure loop looks like in practice.
+      </p>
+
+      <div class="callout">
+        <strong>Responsible disclosure note</strong>
+        Repository names and organization identifiers have been omitted from this post except where a finding was confirmed real and reported. No credentials were tested, validated, or used in any way. One confirmed live credential set was reported to GitHub before this post was published.
+      </div>
+
+      <div class="stat-row">
+        <div class="stat-chip">
+          <span class="stat-num">30</span>
+          <span class="stat-label">Total findings</span>
+        </div>
+        <div class="stat-chip">
+          <span class="stat-num">30</span>
+          <span class="stat-label">Unique repos affected</span>
+        </div>
+        <div class="stat-chip">
+          <span class="stat-num">1</span>
+          <span class="stat-label">Confirmed real + reported</span>
+        </div>
+        <div class="stat-chip">
+          <span class="stat-num">25</span>
+          <span class="stat-label">Dork queries executed</span>
+        </div>
+      </div>
+
+      <h2><span class="num">01.</span>Why GitHub Is Worth Searching</h2>
+
+      <p>
+        GitHub is the world's largest public code repository. Developers routinely commit <code>.env</code> files, service account keys, SAML metadata, and SSO configuration — sometimes accidentally, sometimes because they're following a tutorial that modeled bad habits.
+      </p>
+
+      <p>
+        Attackers already run these searches manually and at scale. The question this research asks is: can a small AI-augmented pipeline surface the same findings faster, classify them more reliably, and do it responsibly?
+      </p>
+
+      <p>
+        The answer is mostly yes — with one critical caveat that almost buried the most important finding in the dataset.
+      </p>
+
+      <h2><span class="num">02.</span>How the Pipeline Works</h2>
+
+      <p>
+        Dork queries are organized into four categories targeting known patterns of IAM exposure:
+      </p>
+
+      <ul>
+        <li><strong style="color:var(--text)">Cloud credentials</strong> — AWS access keys, GCP service account JSON, Azure client secrets</li>
+        <li><strong style="color:var(--text)">Okta / SAML / SSO</strong> — Okta API tokens, SAML metadata files, SSWS tokens</li>
+        <li><strong style="color:var(--text)">Microsoft Entra / Azure AD</strong> — service principal credentials, tenant/client ID pairs</li>
+        <li><strong style="color:var(--text)">Generic secrets</strong> — <code>.env</code> files, <code>secrets.yml</code>, <code>.dockercfg</code>, <code>.npmrc</code> auth tokens</li>
+      </ul>
+
+      <p>
+        25 queries run via the GitHub Search API, capped at 10 results per query to stay within rate limits. Results are deduplicated by repo and file path. Raw file content is processed in memory only — a redaction function replaces credential values with <code>[REDACTED]</code> before anything is stored or sent to the AI layer. Each finding then goes to Claude with a structured classification prompt.
+      </p>
+
+      <p>
+        The model returns a severity score, a likelihood judgment on whether the credential is active vs. test data, the identity provider, applicable MITRE ATT&CK technique IDs, and remediation guidance. Every high and medium severity finding gets manually reviewed by opening the source file directly.
+      </p>
+
+      <p>
+        That last step turned out to be the most important part of the whole pipeline.
+      </p>
+
+      <h2><span class="num">03.</span>What the Numbers Show</h2>
+
+      <div class="table-wrap">
+        <div class="table-label">Severity distribution</div>
+        <table class="data-table">
+          <thead><tr><th>Severity</th><th>Count</th></tr></thead>
+          <tbody>
+            <tr><td>Critical</td><td>0</td></tr>
+            <tr><td>High</td><td>9</td></tr>
+            <tr><td>Medium</td><td>14</td></tr>
+            <tr><td>Low</td><td>2</td></tr>
+            <tr><td>Informational</td><td>5</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="table-wrap">
+        <div class="table-label">Findings by category</div>
+        <table class="data-table">
+          <thead><tr><th>Category</th><th>Count</th></tr></thead>
+          <tbody>
+            <tr><td>Okta / SAML / SSO</td><td>14</td></tr>
+            <tr><td>Cloud credentials</td><td>10</td></tr>
+            <tr><td>Generic secrets</td><td>5</td></tr>
+            <tr><td>Microsoft Entra / Azure AD</td><td>1</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="table-wrap">
+        <div class="table-label">Identity providers detected</div>
+        <table class="data-table">
+          <thead><tr><th>Identity Provider</th><th>Occurrences</th></tr></thead>
+          <tbody>
+            <tr><td>Generic / unknown</td><td>12</td></tr>
+            <tr><td>AWS IAM</td><td>4</td></tr>
+            <tr><td>Okta</td><td>4</td></tr>
+            <tr><td>GCP</td><td>3</td></tr>
+            <tr><td>Microsoft Entra</td><td>3</td></tr>
+            <tr><td>Others</td><td>4</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2><span class="num">04.</span>The AI Got "Likely Real" Almost Completely Wrong</h2>
+
+      <p>
+        This is the most important finding in the research — and it almost didn't make it into the write-up.
+      </p>
+
+      <p>
+        The Claude API flagged all 30 findings as <code>is_likely_real: true</code>. At first glance that sounds like the tool is working. Manual review of the high-severity findings revealed a consistent failure mode: the model was classifying based on structural pattern matching, not actual credential value presence.
+      </p>
+
+      <p>Two clear examples from the high-severity queue:</p>
+
+      <div class="callout">
+        <strong>Example 1 — Shell script loader flagged as HIGH</strong>
+        A file containing <code>export OPENAI_API_KEY="${key_base_dir}/openai.key"</code> was classified as a live credential exposure. In reality it's a shell script that loads keys from local files on the developer's machine at runtime. No credential values are present in the file at all — only variable references to local paths.
+      </div>
+
+      <div class="callout">
+        <strong>Example 2 — Vercel secret references flagged as MEDIUM</strong>
+        A <code>now.json</code> deployment config containing <code>"MELI_CLIENT_SECRET": "@meli-manager-meli_client_secret"</code> was flagged as a live credential. The <code>@</code> prefix is Vercel's syntax for a secret reference. The actual value lives in Vercel's secrets vault and is never written to the file.
+      </div>
+
+      <p>
+        In both cases the AI correctly identified the types of credentials, the identity provider, and generated accurate remediation guidance — but couldn't distinguish between a file that contains a secret and one that references a secret stored elsewhere.
+      </p>
+
+      <p>
+        This is a meaningful limitation for any team building AI-assisted security tooling. The model sees the structure and the key names. It can't see what isn't there. Human review of every high/critical finding is not optional — it's the whole game.
+      </p>
+
+      <h2><span class="num">05.</span>The One Real Finding</h2>
+
+      <p>
+        After manually reviewing the high-severity queue, one finding was unambiguously real.
+      </p>
+
+      <p>
+        A public repository's <code>.env</code> file contained a live Okta SSWS API token for a named Okta organization, a MongoDB Atlas connection string with username and password in the URL, and an Okta Workflows API endpoint with a bearer token. The SSWS token format was valid, the Okta org domain was a real organization — not a <code>dev-</code> sandbox — and the MongoDB connection string pointed to a live Atlas cluster.
+      </p>
+
+      <p>
+        It was reported to GitHub before this post was published. The file URL was provided so the owner could take action. No credentials were tested or used.
+      </p>
+
+      <div class="callout">
+        <strong>The complete research loop</strong>
+        Build a tool. Find a real exposure. Report it responsibly. Document the methodology. The point is not to name the organization or demonstrate impact — it's to show that this class of exposure exists, is findable with modest tooling, and has a responsible path forward.
+      </div>
+
+      <h2><span class="num">06.</span>Key Observations</h2>
+
+      <p><strong style="color:var(--text)">Educational repositories are a systemic risk vector.</strong> One of the HIGH findings came from a publisher's repository for a widely-read book on Python microservices — 400 stars, actively used as a learning reference. The repo contained what appeared to be a real Okta dev instance URL and client credentials committed alongside tutorial code. If the example commits credentials, so will the readers.</p>
+
+      <p><strong style="color:var(--text)">SAML metadata exposure is underappreciated.</strong> 14 of 30 findings involved SAML or SSO configuration. SAML metadata files aren't credentials in the traditional sense, but they expose entity IDs, assertion consumer service URLs, X.509 signing certificates, and SSO endpoint structure. For a targeted attacker that's reconnaissance that would otherwise require active probing. Two findings involved government or large institutional infrastructure.</p>
+
+      <p><strong style="color:var(--text)">The <code>.env</code> file problem isn't getting better.</strong> Despite years of guidance, <code>.gitignore</code> templates, GitHub secret scanning, and widespread documentation, developers continue to commit <code>.env</code> files containing production credentials. Several findings were from repositories pushed within the last 12 months. This is not a legacy problem.</p>
+
+      <p><strong style="color:var(--text)">Credential age doesn't equal credential safety.</strong> Several findings came from repositories last pushed in 2017–2019. Old credentials are not necessarily rotated credentials. Without an active rotation policy or an alert that forces remediation, exposed secrets can sit in public repositories for years unnoticed.</p>
+
+      <h2><span class="num">07.</span>Detection Engineering Takeaways</h2>
+
+      <p>If you're running Splunk or building detections, these findings map directly to actionable rules:</p>
+
+      <ul>
+        <li>Alert on code pushes containing <code>AKIA[A-Z0-9]{16}</code> — the AWS access key format is fixed and highly detectable</li>
+        <li>Enable GitHub Advanced Security secret scanning — free for public repos, covers 200+ credential patterns natively</li>
+        <li>For Okta environments: alert on API token creation events (<code>system.api_token.create</code>) and audit token scopes quarterly</li>
+        <li>Monitor for <code>.env</code>, <code>secrets.yml</code>, <code>.dockercfg</code>, and <code>serviceAccountKey.json</code> in commit diffs via GitHub webhooks or your SIEM's code repository integration</li>
+        <li>For Azure/Entra: alert on service principal credential additions outside your approved provisioning workflow</li>
+      </ul>
+
+      <div class="callout">
+        <strong>Highest-ROI action</strong>
+        Enforce <code>.gitignore</code> templates at repo creation and run GitHub's secret scanning on all public repositories. It's free and it works.
+      </div>
+
+      <h2><span class="num">08.</span>Limitations</h2>
+
+      <p>
+        GitHub's search API returns a ranked sample, not exhaustive results. 30 findings from 25 queries represents a floor, not a ceiling. Credential validity was not verified — severity scores are based on structural analysis and AI judgment, not live testing. The AI classification prompt wasn't fine-tuned for this use case; a purpose-built classifier would likely perform better on the value-vs-reference distinction that caused most false positives. Rate limiting also constrained query volume — a longer research window would surface more findings.
+      </p>
+
+      <div class="table-wrap">
+        <div class="table-label">Responsible disclosure summary</div>
+        <table class="disclosure-table">
+          <tbody>
+            <tr><td>Raw credentials stored</td><td class="status-no">No</td></tr>
+            <tr><td>Credentials tested or validated</td><td class="status-no">No</td></tr>
+            <tr><td>Confirmed live finding reported to GitHub</td><td class="status-yes">Yes</td></tr>
+            <tr><td>Repository owner named in this post</td><td class="status-no">No</td></tr>
+            <tr><td>Tool source code published</td><td class="status-yes">Yes</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="final-thoughts">
+        <h2>Final thoughts</h2>
+        <p>
+          The most valuable thing this pipeline did wasn't find the real credential — it was surface it fast enough that I could report it before anyone else noticed. The AI handled the volume; the human judgment handled the call on what was actually real.
+        </p>
+        <p>
+          That division of labor is the right model for this kind of work. AI triage at scale, human review at the edges, and a clear responsible disclosure path before anything gets published.
+        </p>
+        <p style="margin-bottom:0;">
+          The source code, dork query library, and full methodology are available in the companion GitHub repository. If this research is useful, the most important thing you can do is enable GitHub secret scanning on your organization's repositories today.
+        </p>
+      </div>
+
+    </article>
+
+    <div class="post-footer">
+      <div class="post-footer-nav">
+        <a href="/" class="post-footer-back">← Back to all posts</a>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <span class="tag">AI</span>
+          <span class="tag">GitHub</span>
+          <span class="tag">IAM</span>
+          <span class="tag">Identity</span>
+          <span class="tag">Cloud Security</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</body>
+</html>
