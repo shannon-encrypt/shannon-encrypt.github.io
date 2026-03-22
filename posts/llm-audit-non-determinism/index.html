@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>I Ran the Same AI Security Audit 25 Times — The Zero Doh Blog</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0b0f18; --bg2: #111827; --bg3: #1a2235;
+      --border: rgba(99,179,237,0.12); --border2: rgba(99,179,237,0.22);
+      --cyan: #63b3ed; --cyan-dim: rgba(99,179,237,0.55); --cyan-glow: rgba(99,179,237,0.08);
+      --text: #e2e8f0; --muted: #8899aa; --muted2: #5a6b80;
+      --serif: 'DM Serif Display', serif; --mono: 'DM Mono', monospace; --sans: 'Manrope', sans-serif;
+      --radius: 10px; --radius-lg: 16px; --transition: 0.22s cubic-bezier(0.4,0,0.2,1);
+      --max-prose: 720px;
+    }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 15px; line-height: 1.7; min-height: 100vh; }
+    body::before {
+      content: ''; position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none; z-index: 0; opacity: 0.55;
+    }
+    body::after {
+      content: ''; position: fixed; inset: 0;
+      background-image: linear-gradient(rgba(99,179,237,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(99,179,237,0.03) 1px, transparent 1px);
+      background-size: 48px 48px; pointer-events: none; z-index: 0;
+    }
+    nav { position: sticky; top: 0; z-index: 100; background: rgba(11,15,24,0.88); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border-bottom: 1px solid var(--border); }
+    .nav-inner { max-width: 1100px; margin: 0 auto; padding: 0 24px; height: 60px; display: flex; align-items: center; justify-content: space-between; }
+    .nav-logo { font-family: var(--mono); font-size: 13px; font-weight: 500; color: var(--cyan); text-decoration: none; letter-spacing: 0.04em; display: flex; align-items: center; gap: 8px; }
+    .nav-logo::before { content: '>'; opacity: 0.5; }
+    .nav-links { display: flex; align-items: center; gap: 8px; list-style: none; }
+    .nav-links a { color: var(--muted); text-decoration: none; font-size: 13px; font-weight: 500; letter-spacing: 0.02em; padding: 6px 14px; border-radius: 6px; transition: color var(--transition), background var(--transition); }
+    .nav-links a:hover { color: var(--text); background: var(--bg3); }
+    .nav-links .nav-cta { color: var(--cyan); border: 1px solid var(--border2); }
+    .nav-links .nav-cta:hover { background: var(--cyan-glow); color: var(--cyan); }
+    .page-wrap { position: relative; z-index: 1; max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+    .post-header { max-width: var(--max-prose); margin: 0 auto; padding: 72px 0 48px; }
+    .back-link { display: inline-flex; align-items: center; gap: 8px; font-family: var(--mono); font-size: 12px; color: var(--muted2); text-decoration: none; margin-bottom: 40px; transition: color 0.2s; }
+    .back-link:hover { color: var(--cyan); }
+    .post-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 24px; }
+    .tag { font-family: var(--mono); font-size: 11px; font-weight: 500; letter-spacing: 0.06em; padding: 3px 10px; border-radius: 4px; background: rgba(99,179,237,0.08); color: var(--cyan); border: 1px solid rgba(99,179,237,0.15); text-transform: uppercase; }
+    .post-header h1 { font-family: var(--serif); font-size: clamp(34px, 5vw, 52px); font-weight: 400; line-height: 1.12; color: var(--text); letter-spacing: -0.02em; margin-bottom: 24px; }
+    .post-meta { display: flex; align-items: center; gap: 16px; font-family: var(--mono); font-size: 12px; color: var(--muted2); padding-bottom: 40px; border-bottom: 1px solid var(--border); }
+    .post-meta-sep { opacity: 0.4; }
+    .post-banner { max-width: var(--max-prose); margin: 0 auto 56px; background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius-lg); height: 240px; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; }
+    .banner-bg { position: absolute; inset: 0; background: linear-gradient(135deg, #1a2b45 0%, #0f1e35 60%, #0d1929 100%); }
+    .banner-glyph { font-family: var(--mono); font-size: 96px; color: rgba(99,179,237,0.07); line-height: 1; position: relative; z-index: 1; user-select: none; letter-spacing: -0.05em; }
+    .post-body { max-width: var(--max-prose); margin: 0 auto; padding-bottom: 100px; }
+    .post-body p { color: var(--muted); font-size: 16px; line-height: 1.8; margin-bottom: 20px; }
+    .post-body h2 { font-family: var(--serif); font-size: clamp(22px, 3vw, 28px); font-weight: 400; color: var(--text); margin: 52px 0 16px; line-height: 1.25; }
+    .post-body strong { color: var(--text); font-weight: 600; }
+    .post-body a { color: var(--cyan); text-decoration: none; }
+    .post-body a:hover { text-decoration: underline; }
+    .post-body ul { margin: 16px 0 20px 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .post-body li { display: flex; align-items: flex-start; gap: 12px; font-size: 15px; color: var(--muted); line-height: 1.65; }
+    .post-body li::before { content: '→'; font-family: var(--mono); font-size: 13px; color: var(--cyan); flex-shrink: 0; margin-top: 2px; }
+
+    /* STAT ROW */
+    .stat-row { display: flex; flex-wrap: wrap; gap: 12px; margin: 32px 0; }
+    .stat-chip { background: var(--bg2); border: 1px solid var(--border2); border-radius: var(--radius); padding: 14px 20px; display: flex; flex-direction: column; gap: 4px; min-width: 130px; }
+    .stat-num { font-family: var(--mono); font-size: 22px; font-weight: 500; color: var(--text); }
+    .stat-label { font-size: 11px; color: var(--muted2); text-transform: uppercase; letter-spacing: 0.06em; }
+
+    /* CALLOUT */
+    .callout { background: var(--bg2); border: 1px solid var(--border); border-left: 3px solid var(--cyan); border-radius: 0 var(--radius) var(--radius) 0; padding: 20px 24px; margin: 28px 0; font-size: 14px; color: var(--muted); line-height: 1.7; }
+    .callout strong { display: block; margin-bottom: 6px; font-family: var(--mono); font-size: 11px; color: var(--cyan); letter-spacing: 0.08em; text-transform: uppercase; }
+
+    /* PDF SECTION */
+    .pdf-section { margin: 48px 0; }
+    .pdf-section h2 { font-family: var(--serif); font-size: clamp(22px, 3vw, 28px); font-weight: 400; color: var(--text); margin-bottom: 16px; }
+    .pdf-card { background: var(--bg2); border: 1px solid var(--border2); border-radius: var(--radius-lg); overflow: hidden; }
+    .pdf-card-header { padding: 20px 24px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border); }
+    .pdf-card-title { font-family: var(--mono); font-size: 13px; color: var(--cyan); }
+    .pdf-download { display: inline-flex; align-items: center; gap: 6px; font-family: var(--mono); font-size: 12px; color: var(--muted); text-decoration: none; padding: 6px 14px; border: 1px solid var(--border2); border-radius: 6px; transition: all var(--transition); }
+    .pdf-download:hover { color: var(--cyan); border-color: var(--cyan-dim); background: var(--cyan-glow); }
+    .pdf-embed { width: 100%; height: 600px; border: none; display: block; }
+
+    /* FINAL THOUGHTS */
+    .final-thoughts { background: var(--bg2); border: 1px solid var(--border2); border-radius: var(--radius-lg); padding: 36px 40px; margin-top: 48px; }
+    .final-thoughts h2 { font-family: var(--serif); font-size: 24px; font-weight: 400; color: var(--text); margin-bottom: 16px; }
+
+    .post-footer { max-width: var(--max-prose); margin: 0 auto; padding: 40px 0 64px; border-top: 1px solid var(--border); }
+    .post-footer-back { display: inline-flex; align-items: center; gap: 8px; font-family: var(--mono); font-size: 13px; color: var(--cyan); text-decoration: none; transition: gap 0.2s; }
+    .post-footer-back:hover { gap: 12px; }
+    footer { border-top: 1px solid var(--border); padding: 28px 0; }
+    .footer-inner { max-width: 1100px; margin: 0 auto; padding: 0 24px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+    .footer-logo { font-family: var(--mono); font-size: 12px; color: var(--muted2); }
+    .footer-copy { font-size: 12px; color: var(--muted2); }
+    @media (max-width: 600px) {
+      .post-header, .post-body, .post-banner, .post-footer { padding-left: 0; padding-right: 0; }
+      .stat-row { flex-direction: column; }
+      .final-thoughts { padding: 24px; }
+      .pdf-embed { height: 400px; }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="nav-inner">
+      <a href="/" class="nav-logo">zero_doh.blog</a>
+      <ul class="nav-links">
+        <li><a href="/#posts">Posts</a></li>
+        <li><a href="/#about">About</a></li>
+        <li><a href="/#projects">Research</a></li>
+        <li><a href="/#contact" class="nav-cta">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="page-wrap">
+    <header class="post-header">
+      <a href="/" class="back-link">← Back to all posts</a>
+      <div class="post-tags">
+        <span class="tag">AI</span>
+        <span class="tag">Security</span>
+        <span class="tag">Research</span>
+        <span class="tag">LLM</span>
+        <span class="tag">AppSec</span>
+      </div>
+      <h1>I Ran the Same AI Security Audit 25 Times. Here's What I Found.</h1>
+      <div class="post-meta">
+        <span>March 3, 2026</span>
+        <span class="post-meta-sep">·</span>
+        <span>5 min read</span>
+        <span class="post-meta-sep">·</span>
+        <span>Shannon Agarwal</span>
+      </div>
+    </header>
+
+    <div class="post-banner">
+      <div class="banner-bg"></div>
+      <span class="banner-glyph">0xLLM</span>
+    </div>
+
+    <article class="post-body">
+
+      <div class="stat-row">
+        <div class="stat-chip">
+          <span class="stat-num">100%</span>
+          <span class="stat-label">Detection Rate</span>
+        </div>
+        <div class="stat-chip">
+          <span class="stat-num">25/25</span>
+          <span class="stat-label">Full-Sweep Runs</span>
+        </div>
+        <div class="stat-chip">
+          <span class="stat-num">16.6%</span>
+          <span class="stat-label">Token Variance</span>
+        </div>
+        <div class="stat-chip">
+          <span class="stat-num">9</span>
+          <span class="stat-label">Vulnerabilities Tracked</span>
+        </div>
+      </div>
+
+      <p>Classic tools like Nessus or Nmap are deterministic — if a vulnerability exists, they report it every time. AI works differently. It generates responses probabilistically, meaning the same code can produce different findings on different runs.</p>
+
+      <p>I built a vulnerable Flask app with 9 documented security flaws — hardcoded credentials (CWE-798) and broken authentication (CWE-287, CWE-330, CWE-208, and others) — then sent it to the Claude API 25 times, byte-for-byte identical input each run.</p>
+
+      <h2>The Result</h2>
+
+      <p>100% detection across all 25 runs. Every vulnerability, every time.</p>
+
+      <p>But here's the more interesting finding: output token count varied from 1,167 to 1,376 tokens across identical runs. A 16.6% swing in response length on the exact same input. Non-determinism was real and measurable. It just showed up as verbosity variance, not detection failure.</p>
+
+      <div class="callout">
+        <strong>Why the variance?</strong>
+        My test bugs were syntactically obvious. A hardcoded string like <code style="font-family:var(--mono);font-size:12px;color:var(--cyan)">sk_live_4eC39…</code> doesn't require reasoning — it's pure pattern recognition. Non-determinism showed up as response length variance: the AI wrote 16.6% more tokens on its longest run than its shortest, covering the same bugs with different levels of detail.
+      </div>
+
+      <h2>Where This Gets Interesting</h2>
+
+      <p>The real risk is subtler bugs: a timing attack buried in business logic, an IDOR that requires understanding your data model, an auth bypass that only triggers under specific conditions. Those require the model to reason, not just match patterns.</p>
+
+      <p>That's where token sampling variance becomes detection variance — where a critical vulnerability appears in 18 of 25 runs and you have no idea which run caught it.</p>
+
+      <h2>The Takeaway for Security Teams</h2>
+
+      <ul>
+        <li>A single AI audit pass isn't enough for logic-level vulnerabilities</li>
+        <li>The right number of passes depends on how subtle your codebase's bugs are</li>
+        <li>A bug detected 80% of the time is not the same as one detected 100% of the time</li>
+        <li>You can't tell the difference with one run</li>
+      </ul>
+
+      <p>This isn't an "AI is bad" take. It's a "know your tools" take.</p>
+
+      <p>Next experiment: semantically subtle vulnerabilities to see where detection actually drops off. Will share results.</p>
+
+      <div class="pdf-section">
+        <h2>See the Full Results</h2>
+        <p>The complete research report includes the full detection matrix (25 runs × 9 vulnerabilities), token variance data, and CWE breakdown.</p>
+        <div class="pdf-card">
+          <div class="pdf-card-header">
+            <span class="pdf-card-title">// LLM Non-Determinism Study — Full Report</span>
+            <a href="/research/security_audit_report.pdf" download class="pdf-download">↓ Download PDF</a>
+          </div>
+          <iframe class="pdf-embed" src="/research/security_audit_report.pdf" title="LLM Security Audit Research Report"></iframe>
+        </div>
+      </div>
+
+      <div class="final-thoughts">
+        <h2>What's Next</h2>
+        <p>The syntactically obvious bugs were a baseline. The real experiment is semantically subtle vulnerabilities — bugs that require the model to reason about your specific business logic, not just match known patterns. That's where I expect detection variance to actually show up. Results coming.</p>
+      </div>
+
+    </article>
+
+    <div class="post-footer">
+      <a href="/" class="post-footer-back">← Back to all posts</a>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-inner">
+      <span class="footer-logo">// zero_doh.blog</span>
+      <span class="footer-copy">© 2026 Shannon Agarwal. All rights reserved.</span>
+    </div>
+  </footer>
+</body>
+</html>
