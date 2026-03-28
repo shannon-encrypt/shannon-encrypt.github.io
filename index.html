@@ -1007,7 +1007,7 @@
   <div class="page-wrap">
     <section class="hero">
       <p class="hero-eyebrow animate">Security engineering  Cloud  Detection</p>
-      <h1 class="animate delay-1" style="text-align:right">Insights from the <em>trenches</em> of cloud security</h1>
+      <h1 class="animate delay-1" style="text-align:right">Insights from the <em>trenches</em> of cloud security and AI</h1>
       <p class="hero-desc animate delay-2">
         Field notes, research, and hard-won lessons from 15+ years securing cloud infrastructure,
         building detections, and fighting complexity with clarity.
@@ -1032,9 +1032,6 @@
       </div>
     </section>
   </div>
-
-
-
 
         </div>
 
@@ -1123,6 +1120,25 @@
           </div>
         </a>
 
+        <!-- NEW: IAM Exposure post card -->
+        <a href="/posts/iam-exposure-github/" class="post-card">
+          <div class="card-glyph">03</div>
+          <div class="post-tags">
+            <span class="tag">AI</span>
+            <span class="tag">IAM</span>
+            <span class="tag">GitHub</span>
+          </div>
+          <h3 class="card-title">IAM Exposure on GitHub: What AI-Assisted Dorking Found in the Wild</h3>
+          <p class="card-excerpt">
+            Built an AI-assisted GitHub dorking pipeline to surface credential exposure across public repos.
+            30 findings, one confirmed live Okta token, and a lesson in where AI triage breaks down.
+          </p>
+          <div class="card-footer">
+            <span class="card-date">March 22, 2026</span>
+            <span class="card-arrow">→</span>
+          </div>
+        </a>
+
       </div>
     </section>
   </div>
@@ -1176,6 +1192,39 @@
           <a href="https://www.linkedin.com/posts/shannon-agarwal_cybersecurity-appsec-ai-activity-7435019294989713408-b54r?utm_source=share&utm_medium=member_desktop&rcm=ACoAAADeoPMB-qi6yvRO_TTyywU8V0qBjgsBsiM" target="_blank" rel="noopener" class="project-blog-link">Read the full write-up →</a>
         </div>
 
+        <!-- NEW: IAM Exposure project card -->
+        <div class="project-card">
+          <div class="project-header">
+            <span class="project-icon">[IAM]</span>
+            <a href="/posts/iam-exposure-github/" class="project-status" style="text-decoration:none;">Read blog →</a>
+          </div>
+          <h3 class="project-title">IAM Exposure Research: AI-Assisted GitHub Dorking</h3>
+          <p class="project-desc">
+            Built an automated GitHub dorking pipeline to surface IAM credential exposure across public
+            repositories. Each finding enriched by Claude API with severity scoring, IdP fingerprinting,
+            MITRE ATT&CK mapping, and remediation guidance. One confirmed live Okta SSWS token found
+            and reported before publication.
+          </p>
+          <div class="project-findings">
+            <div class="finding-stat">
+              <span class="finding-num">30</span>
+              <span class="finding-label">Unique findings across 25 queries</span>
+            </div>
+            <div class="finding-stat">
+              <span class="finding-num">1</span>
+              <span class="finding-label">Confirmed live credential reported</span>
+            </div>
+          </div>
+          <div class="project-tech">
+            <span class="tech-badge">Python</span>
+            <span class="tech-badge">PyGithub</span>
+            <span class="tech-badge">Anthropic API</span>
+            <span class="tech-badge">MITRE ATT&amp;CK</span>
+            <span class="tech-badge">Okta / SAML</span>
+          </div>
+          <a href="https://github.com/shannon-encrypt/iam-exposure-research" target="_blank" rel="noopener" class="project-blog-link">View on GitHub →</a>
+        </div>
+
         <div class="project-card">
           <div class="project-header">
             <span class="project-icon">[VM]</span>
@@ -1198,7 +1247,7 @@
         <div class="project-card">
           <div class="project-header">
             <span class="project-icon">[DET]</span>
-            <span class="project-status">Active</span>
+            <span class="project-status">Completed</span>
           </div>
           <h3 class="project-title">Splunk Detection Engineering</h3>
           <p class="project-desc">
