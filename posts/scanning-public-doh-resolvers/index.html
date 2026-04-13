@@ -167,7 +167,7 @@
         <li><strong>info_leakage</strong> — server header fingerprinting, internal IP disclosure in DNS answers</li>
         <li><strong>cache_poison</strong> — TTL consistency across repeated queries, DNSSEC validation gaps</li>
         <li><strong>rebinding</strong> — zero-TTL record handling, PTR responses for loopback addresses</li>
-        <li><strong>ssrf</strong> — whether the resolver will resolve hostnames like <code>localhost</code>, <code>169.254.169.254</code>, or <code>metadata.google.internal</code></li>
+        <li><strong>ssrf</strong> — whether the resolver will resolve hostnames like <code>localhost</code>, <code>169.254.169.254</code>, or <code style="white-space:nowrap">metadata.google.internal</code></li>
       </ul>
 
       <p>All checks are passive or semi-passive — no exploitation, just probing behavior directly observable from the DNS response layer.</p>
