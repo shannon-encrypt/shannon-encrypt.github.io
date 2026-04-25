@@ -452,6 +452,10 @@
 
       <p>That last step turned out to be the most important part of the whole pipeline.</p>
 
+      <p>
+        The tool also supports TruffleHog scanning as an optional second layer via the <code>--trufflehog</code> flag. When enabled, TruffleHog runs in detection-only mode (<code>--no-verification</code>) — either as an independent org scan before dorking, or as a depth scan against repos surfaced by the first enrichment pass. A <code>--repo</code> flag targets a single repository directly. TruffleHog findings carry a <code>source</code> field distinguishing them from dorker findings and run through the same enrichment pipeline in a separate second pass.
+      </p>
+
       <h2><span class="num">03.</span> What the Numbers Show</h2>
 
       <div class="table-wrap">
@@ -522,6 +526,10 @@
 
       <p>
         This is a meaningful limitation for any team building AI-assisted security tooling. The model sees the structure and the key names. It can't see what isn't there. Human review of every high/critical finding is not optional. It's the whole game.
+      </p>
+
+      <p>
+        These findings directly informed two query-level improvements: AWS dork queries were updated to exclude <code>os.environ</code> and <code>os.getenv</code> references, and the <code>.npmrc</code> dork was updated to exclude placeholder token patterns like <code>${NPM_TOKEN}</code>. These changes reduce noise before findings reach the classification stage — but they don't eliminate the class of false positive. The AI still can't distinguish a secret from a reference to one stored elsewhere.
       </p>
 
       <h2><span class="num">05.</span> The One Real Finding</h2>
