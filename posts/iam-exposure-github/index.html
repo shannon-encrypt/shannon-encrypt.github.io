@@ -443,7 +443,11 @@
       </p>
 
       <p>
-        The model returns a severity score, a likelihood judgment on whether the credential is active vs. test data, the identity provider, applicable MITRE ATT&CK technique IDs, and remediation guidance. Every high and medium severity finding gets manually reviewed by opening the source file directly.
+        The model (<code>claude-sonnet-4-6</code>) returns a severity score, a likelihood judgment on whether the credential is active vs. test data, the identity provider, applicable MITRE ATT&CK technique IDs, and remediation guidance. Every high and medium severity finding gets manually reviewed by opening the source file directly.
+      </p>
+
+      <p>
+        AI enrichment requires an Anthropic API key and is optional — the tool runs without one using <code>--skip-enrichment</code>, which produces a raw report of unclassified findings instead.
       </p>
 
       <p>That last step turned out to be the most important part of the whole pipeline.</p>
